@@ -13,6 +13,13 @@ To start:
   - `TinyMCE` for WYSIWYG editor
     - VITE_TINY_KEY 
 - run `npm run start`
+- Test user accounts:
+  - Writer Account
+    - username: `writer`
+    - password: `writer`
+  - Editor Account
+    - username: `editor`
+    - password: `editor`
 ---
 ## Specifications
 - Develop a Writer/Editor Dashboard Site that has the ablity to create, edit, and publish an article related to a company. 

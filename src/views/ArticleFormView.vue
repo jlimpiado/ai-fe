@@ -2,6 +2,22 @@
 import {getSessionData} from "@/helpers.js";
 import {onMounted, ref} from "vue";
 import Editor from '@tinymce/tinymce-vue';
+// TINYMCE SELF HOST
+// PLUGINS
+import 'tinymce/tinymce.min.js';
+import "tinymce/plugins/lists/plugin.min.js";
+import "tinymce/plugins/link/plugin.min.js";
+import "tinymce/plugins/table/plugin.min.js";
+import "tinymce/plugins/code/plugin.min.js";
+import "tinymce/plugins/help/plugin.min.js";
+import "tinymce/plugins/wordcount/plugin.min.js";
+import "tinymce/plugins/help/plugin.min.js";
+import "tinymce/plugins/help/js/i18n/keynav/en.js";
+// ESSENTIALS
+import "tinymce/themes/silver/theme.min.js";
+import "tinymce/models/dom/model.min.js";
+import "tinymce/icons/default/icons.min.js";
+
 import {store} from "@/store.js";
 import {
   deleteImg,
@@ -33,7 +49,6 @@ const companies = ref(null);
   })
 })()
 
-const TINY_KEY = import.meta.env.VITE_TINY_KEY;
 const userData = getSessionData();
 
 const company_name = ref('');
@@ -125,7 +140,7 @@ const submitFunction = async (toggle) => {
     toBeInserted['editor'] = userData.id;
   }
 
-  const {data: _, error} = await handleActionArticle(toBeInserted);
+  const {error} = await handleActionArticle(toBeInserted);
 
   if(error){
     await deleteImg(resImg.data.path);
@@ -189,15 +204,17 @@ const submitFunction = async (toggle) => {
       <label for="content">Content:</label>
       <Editor
         v-model="content"
-        v-if="TINY_KEY"
         :ref="content"
-        :api-key="TINY_KEY"
         :init="{
-          selector: 'textarea',
-          plugins: 'list link table code help word count',
+          plugins: 'lists link table code help wordcount',
+          skin_url: '/tinymce/skins/ui/oxide',
+          content_css: '/tinymce/skins/content/default',
+          base_url: 'tinymce',
+          suffix: '.min',
+          license_key: 'gpl'
         }"
       />
-      <p v-else>NEED TinyMCE KEY</p>
+<!--      <p v-else>NEED TinyMCE KEY</p>-->
     </div>
     <div class="button_group">
       <button type="submit">SUBMIT</button>

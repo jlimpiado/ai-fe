@@ -10,6 +10,26 @@ const router = useRouter()
 const username = ref('');
 const password = ref('');
 const errMessage = ref('');
+const isConnectionOnline = ref(true);
+
+const checkConnection = async () => {
+  try {
+    const {_, error} = await supabase.from('users').select().single();
+
+    if(error) {
+      console.error(error);
+      isConnectionOnline.value = false;
+      return;
+    }
+    console.log("Supabase is online.")
+  } catch (error) {
+    console.error(error)
+    isConnectionOnline.value = false;
+  }
+}
+
+checkConnection();
+
 
 const login = async () => {
   store.toggleLoading();
@@ -42,6 +62,10 @@ const login = async () => {
 
 <template>
   <main>
+    <div :class="isConnectionOnline ? 'close' : 'open'" class="modal">
+      <h1>SUPABASE IS OFFLINE</h1>
+      <p>Contact developer to restore it.</p>
+    </div>
     <h1 class="title">LOGIN</h1>
     <div class="container">
       <form class="form_container" @submit.prevent="login">
@@ -55,6 +79,26 @@ const login = async () => {
 </template>
 
 <style scoped>
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100vw;
+  height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #222;
+}
+
+.open {
+  display: flex;
+}
+
+.close {
+  display: none;
+}
 .title {
   display: grid;
   place-items: center;
